@@ -1,0 +1,20 @@
+{
+	"name": "markguinn/silverstripe-shop-ajax",
+	"description": "Ajax functionality for burnbright/silverstripe-shop",
+	"type": "silverstripe-module",
+	"keywords": ["silverstripe", "ajax", "javascript", "events", "regions", "shop", "ecommerce"],
+	"license": "MIT",
+	"authors": [{
+		"name": "Mark Guinn",
+		"email": "mark@adaircreative.com",
+		"homepage": "http://github.com/markguinn"
+	}],
+	"extra": {
+		"installer-name": "shop_ajax"
+	},
+	"require": {
+		"silverstripe/framework": "~3.1",
+		"burnbright/silverstripe-shop": "~1.0",
+		"markguinn/silverstripe-ajax": "dev-master"
+	}
+}
