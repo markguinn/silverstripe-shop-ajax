@@ -15,6 +15,6 @@
 	"require": {
 		"silverstripe/framework": "~3.1",
 		"burnbright/silverstripe-shop": "~1.0",
-		"markguinn/silverstripe-ajax": "dev-master"
+		"markguinn/silverstripe-ajax": "~1.0.0"
 	}
 }
