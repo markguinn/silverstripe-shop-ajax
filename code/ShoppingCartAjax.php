@@ -200,6 +200,44 @@ class ShoppingCartAjax extends Extension {
 	}
 
 
+    /**
+     * Adds the ajax class to the AddProductForm
+     */
+    public function updateAddProductForm() {
+        $this->owner->addExtraClass('ajax');
+    }
+
+
+    /**
+     * @param SS_HTTPRequest $request
+     * @param AjaxHTTPResponse $response
+     * @param Buyable $buyable [optional]
+     * @param int $quantity [optional]
+     * @param AddProductForm $form [optional]
+     */
+    public function updateAddProductFormResponse(&$request, &$response, $buyable=null, $quantity=1, $form=null) {
+        if ($request->isAjax()) {
+            if (!$response) $response = $this->owner->getAjaxResponse();
+            $this->setupRenderContexts($response, $buyable);
+            $response->addRenderContext('FORM', $form);
+            $response->pushRegion('SideCart', $this->owner);
+            $response->triggerEvent('cartadd');
+            $response->triggerEvent('cartchange', array(
+                'action'    => 'add',
+                'id'        => $buyable->ID,
+                'quantity'  => $quantity,
+            ));
+
+            // Because ShoppingCart::current() calculates the order once and
+            // then remembers the total, and that was called BEFORE the product
+            // was added, we need to recalculate again here. Under non-ajax
+            // requests the redirect eliminates the need for this but under
+            // ajax the total lags behind the subtotal without this.
+            ShoppingCart::curr()->calculate();
+        }
+    }
+
+
 	/**
 	 * Adds some standard render contexts for pulled regions.
 	 *
