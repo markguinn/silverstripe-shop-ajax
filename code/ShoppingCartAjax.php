@@ -27,6 +27,14 @@ class ShoppingCartAjax extends Extension {
 				'quantity'  => $quantity,
 			));
 
+			if(self::config()->show_ajax_messages) {
+				$response->triggerEvent('statusmessage', array(
+					'content'   => $this->owner->cart->getMessage(),
+					'type'      => $this->owner->cart->getMessageType(),
+				));
+				$this->owner->cart->clearMessage();
+			}
+
 			// Because ShoppingCart::current() calculates the order once and
 			// then remembers the total, and that was called BEFORE the product
 			// was added, we need to recalculate again here. Under non-ajax
@@ -54,6 +62,14 @@ class ShoppingCartAjax extends Extension {
 				'id'        => $product->ID,
 				'quantity'  => $quantity,
 			));
+
+			if(self::config()->show_ajax_messages) {
+				$response->triggerEvent('statusmessage', array(
+					'content'   => $this->owner->cart->getMessage(),
+					'type'      => $this->owner->cart->getMessageType(),
+				));
+				$this->owner->cart->clearMessage();
+			}
 
 			// Because ShoppingCart::current() calculates the order once and
 			// then remembers the total, and that was called BEFORE the product
@@ -87,6 +103,14 @@ class ShoppingCartAjax extends Extension {
 				'id'        => $product,
 				'quantity'  => 0,
 			));
+
+			if(self::config()->show_ajax_messages) {
+				$response->triggerEvent('statusmessage', array(
+					'content'   => $this->owner->cart->getMessage(),
+					'type'      => $this->owner->cart->getMessageType(),
+				));
+				$this->owner->cart->clearMessage();
+			}
 
 			// Because ShoppingCart::current() calculates the order once and
 			// then remembers the total, and that was called BEFORE the product
@@ -122,6 +146,14 @@ class ShoppingCartAjax extends Extension {
 				'quantity'  => $quantity,
 			));
 
+			if(self::config()->show_ajax_messages) {
+				$response->triggerEvent('statusmessage', array(
+					'content'   => $this->owner->cart->getMessage(),
+					'type'      => $this->owner->cart->getMessageType(),
+				));
+				$this->owner->cart->clearMessage();
+			}
+
 			// Because ShoppingCart::current() calculates the order once and
 			// then remembers the total, and that was called BEFORE the product
 			// was added, we need to recalculate again here. Under non-ajax
@@ -151,6 +183,14 @@ class ShoppingCartAjax extends Extension {
 			$response->triggerEvent('cartchange', array(
 				'action'    => 'clear',
 			));
+
+			if(self::config()->show_ajax_messages) {
+				$response->triggerEvent('statusmessage', array(
+					'content'   => $this->owner->cart->getMessage(),
+					'type'      => $this->owner->cart->getMessageType(),
+				));
+				$this->owner->cart->clearMessage();
+			}
 
 			// Because ShoppingCart::current() calculates the order once and
 			// then remembers the total, and that was called BEFORE the product
@@ -189,6 +229,14 @@ class ShoppingCartAjax extends Extension {
 				'id'        => $variation->ID,
 				'quantity'  => $quantity,
 			));
+
+			if(self::config()->show_ajax_messages) {
+				$response->triggerEvent('statusmessage', array(
+					'content'   => $form->Message(),
+					'type'      => $form->MessageType(),
+				));
+				$form->clearMessage();
+			}
 
 			// Because ShoppingCart::current() calculates the order once and
 			// then remembers the total, and that was called BEFORE the product
@@ -264,6 +312,15 @@ class ShoppingCartAjax extends Extension {
 				$response->addRenderContext('PRODUCT', $buyable->Product());
 			}
 		}
+	}
+
+	/**
+	 * Helper for getting static shop config.
+	 * The 'config' static function isn't avaialbe on Extensions.
+	 * @return Config_ForClass configuration object
+	 */
+	public static function config() {
+		return new Config_ForClass("ShoppingCartAjax");
 	}
 
 }
