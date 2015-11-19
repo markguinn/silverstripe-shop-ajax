@@ -9,3 +9,8 @@ VariationForm:
     - ShoppingCartAjax
     - AjaxControllerExtension
     - ViewableCart
+AddProductForm:
+  extensions:
+    - ShoppingCartAjax
+    - AjaxControllerExtension
+    - ViewableCart
