@@ -27,13 +27,13 @@ class ShoppingCartAjax extends Extension {
 				'quantity'  => $quantity,
 			));
 
-            if(ShoppingCart_Controller::config()->show_ajax_messages) {
-                $response->triggerEvent('statusmessage', array(
-                    'content'   => $this->owner->cart->getMessage(),
-                    'type'      => $this->owner->cart->getMessageType(),
-                ));
-                $this->owner->cart->clearMessage();
-            }
+			if(ShoppingCart_Controller::config()->show_ajax_messages) {
+				$response->triggerEvent('statusmessage', array(
+					'content'   => $this->owner->cart->getMessage(),
+					'type'      => $this->owner->cart->getMessageType(),
+				));
+				$this->owner->cart->clearMessage();
+			}
 
 			// Because ShoppingCart::current() calculates the order once and
 			// then remembers the total, and that was called BEFORE the product
@@ -63,13 +63,13 @@ class ShoppingCartAjax extends Extension {
 				'quantity'  => $quantity,
 			));
 
-            if(ShoppingCart_Controller::config()->show_ajax_messages) {
-                $response->triggerEvent('statusmessage', array(
-                    'content'   => $this->owner->cart->getMessage(),
-                    'type'      => $this->owner->cart->getMessageType(),
-                ));
-                $this->owner->cart->clearMessage();
-            }
+			if(ShoppingCart_Controller::config()->show_ajax_messages) {
+				$response->triggerEvent('statusmessage', array(
+					'content'   => $this->owner->cart->getMessage(),
+					'type'      => $this->owner->cart->getMessageType(),
+				));
+				$this->owner->cart->clearMessage();
+			}
 
 			// Because ShoppingCart::current() calculates the order once and
 			// then remembers the total, and that was called BEFORE the product
@@ -104,13 +104,13 @@ class ShoppingCartAjax extends Extension {
 				'quantity'  => 0,
 			));
 
-            if(ShoppingCart_Controller::config()->show_ajax_messages) {
-                $response->triggerEvent('statusmessage', array(
-                    'content'   => $this->owner->cart->getMessage(),
-                    'type'      => $this->owner->cart->getMessageType(),
-                ));
-                $this->owner->cart->clearMessage();
-            }
+			if(ShoppingCart_Controller::config()->show_ajax_messages) {
+				$response->triggerEvent('statusmessage', array(
+					'content'   => $this->owner->cart->getMessage(),
+					'type'      => $this->owner->cart->getMessageType(),
+				));
+				$this->owner->cart->clearMessage();
+			}
 
 			// Because ShoppingCart::current() calculates the order once and
 			// then remembers the total, and that was called BEFORE the product
@@ -146,13 +146,13 @@ class ShoppingCartAjax extends Extension {
 				'quantity'  => $quantity,
 			));
 
-            if(ShoppingCart_Controller::config()->show_ajax_messages) {
-                $response->triggerEvent('statusmessage', array(
-                    'content'   => $this->owner->cart->getMessage(),
-                    'type'      => $this->owner->cart->getMessageType(),
-                ));
-                $this->owner->cart->clearMessage();
-            }
+			if(ShoppingCart_Controller::config()->show_ajax_messages) {
+				$response->triggerEvent('statusmessage', array(
+					'content'   => $this->owner->cart->getMessage(),
+					'type'      => $this->owner->cart->getMessageType(),
+				));
+				$this->owner->cart->clearMessage();
+			}
 
 			// Because ShoppingCart::current() calculates the order once and
 			// then remembers the total, and that was called BEFORE the product
@@ -184,13 +184,13 @@ class ShoppingCartAjax extends Extension {
 				'action'    => 'clear',
 			));
 
-            if(ShoppingCart_Controller::config()->show_ajax_messages) {
-                $response->triggerEvent('statusmessage', array(
-                    'content'   => $this->owner->cart->getMessage(),
-                    'type'      => $this->owner->cart->getMessageType(),
-                ));
-                $this->owner->cart->clearMessage();
-            }
+			if(ShoppingCart_Controller::config()->show_ajax_messages) {
+				$response->triggerEvent('statusmessage', array(
+					'content'   => $this->owner->cart->getMessage(),
+					'type'      => $this->owner->cart->getMessageType(),
+				));
+				$this->owner->cart->clearMessage();
+			}
 
 			// Because ShoppingCart::current() calculates the order once and
 			// then remembers the total, and that was called BEFORE the product
@@ -230,13 +230,13 @@ class ShoppingCartAjax extends Extension {
 				'quantity'  => $quantity,
 			));
 
-            if(ShoppingCart_Controller::config()->show_ajax_messages) {
-                $response->triggerEvent('statusmessage', array(
-                    'content'   => $form->Message(),
-                    'type'      => $form->MessageType(),
-                ));
-                $form->clearMessage();
-            }
+			if(ShoppingCart_Controller::config()->show_ajax_messages) {
+				$response->triggerEvent('statusmessage', array(
+					'content'   => $form->Message(),
+					'type'      => $form->MessageType(),
+				));
+				$form->clearMessage();
+			}
 
 			// Because ShoppingCart::current() calculates the order once and
 			// then remembers the total, and that was called BEFORE the product
