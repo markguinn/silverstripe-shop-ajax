@@ -2,5 +2,5 @@
 Name: shopajaxconfig
 ---
 
-ShoppingCart_Controller:
+ShoppingCartAjax:
   show_ajax_messages: false

@@ -27,7 +27,7 @@ class ShoppingCartAjax extends Extension {
 				'quantity'  => $quantity,
 			));
 
-			if(ShoppingCart_Controller::config()->show_ajax_messages) {
+			if(self::config()->show_ajax_messages) {
 				$response->triggerEvent('statusmessage', array(
 					'content'   => $this->owner->cart->getMessage(),
 					'type'      => $this->owner->cart->getMessageType(),
@@ -63,7 +63,7 @@ class ShoppingCartAjax extends Extension {
 				'quantity'  => $quantity,
 			));
 
-			if(ShoppingCart_Controller::config()->show_ajax_messages) {
+			if(self::config()->show_ajax_messages) {
 				$response->triggerEvent('statusmessage', array(
 					'content'   => $this->owner->cart->getMessage(),
 					'type'      => $this->owner->cart->getMessageType(),
@@ -104,7 +104,7 @@ class ShoppingCartAjax extends Extension {
 				'quantity'  => 0,
 			));
 
-			if(ShoppingCart_Controller::config()->show_ajax_messages) {
+			if(self::config()->show_ajax_messages) {
 				$response->triggerEvent('statusmessage', array(
 					'content'   => $this->owner->cart->getMessage(),
 					'type'      => $this->owner->cart->getMessageType(),
@@ -146,7 +146,7 @@ class ShoppingCartAjax extends Extension {
 				'quantity'  => $quantity,
 			));
 
-			if(ShoppingCart_Controller::config()->show_ajax_messages) {
+			if(self::config()->show_ajax_messages) {
 				$response->triggerEvent('statusmessage', array(
 					'content'   => $this->owner->cart->getMessage(),
 					'type'      => $this->owner->cart->getMessageType(),
@@ -184,7 +184,7 @@ class ShoppingCartAjax extends Extension {
 				'action'    => 'clear',
 			));
 
-			if(ShoppingCart_Controller::config()->show_ajax_messages) {
+			if(self::config()->show_ajax_messages) {
 				$response->triggerEvent('statusmessage', array(
 					'content'   => $this->owner->cart->getMessage(),
 					'type'      => $this->owner->cart->getMessageType(),
@@ -230,7 +230,7 @@ class ShoppingCartAjax extends Extension {
 				'quantity'  => $quantity,
 			));
 
-			if(ShoppingCart_Controller::config()->show_ajax_messages) {
+			if(self::config()->show_ajax_messages) {
 				$response->triggerEvent('statusmessage', array(
 					'content'   => $form->Message(),
 					'type'      => $form->MessageType(),
@@ -274,6 +274,15 @@ class ShoppingCartAjax extends Extension {
 				$response->addRenderContext('PRODUCT', $buyable->Product());
 			}
 		}
+	}
+
+	/**
+	 * Helper for getting static shop config.
+	 * The 'config' static function isn't avaialbe on Extensions.
+	 * @return Config_ForClass configuration object
+	 */
+	public static function config() {
+		return new Config_ForClass("ShoppingCartAjax");
 	}
 
 }
