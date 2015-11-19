@@ -1,0 +1,6 @@
+---
+Name: shopajaxconfig
+---
+
+ShoppingCart_Controller:
+  show_ajax_messages: false
