@@ -276,6 +276,53 @@ class ShoppingCartAjax extends Extension {
 				'quantity'  => $quantity,
 			));
 
+			if(self::config()->show_ajax_messages) {
+				$response->triggerEvent('statusmessage', array(
+					'content'   => $this->owner->cart->getMessage(),
+					'type'      => $this->owner->cart->getMessageType(),
+				));
+				$this->owner->cart->clearMessage();
+			}
+
+			// Because ShoppingCart::current() calculates the order once and
+			// then remembers the total, and that was called BEFORE the product
+			// was added, we need to recalculate again here. Under non-ajax
+			// requests the redirect eliminates the need for this but under
+			// ajax the total lags behind the subtotal without this.
+			ShoppingCart::curr()->calculate();
+		}
+	}
+
+
+	/**
+	 * Adds the ajax class to the CartForm
+	 */
+	public function updateCartForm(&$form, $cart) {
+		$form->addExtraClass('ajax');
+	}
+
+
+	/**
+	 * @param SS_HTTPRequest $request
+	 * @param AjaxHTTPResponse $response
+	 * @param AddProductForm $form [optional]
+	 */
+	public function updateCartFormResponse(&$request, &$response, $form=null) {
+		if ($request->isAjax()) {
+			if (!$response) $response = $this->owner->getAjaxResponse();
+			$this->setupRenderContexts($response);
+
+			$data['Editable'] = true;
+			$response->pushRegion('CartTable', $this->owner->cart, $data);
+
+			if(self::config()->show_ajax_messages) {
+				$response->triggerEvent('statusmessage', array(
+					'content'   => $form->Message(),
+					'type'      => $form->MessageType(),
+				));
+				$form->clearMessage();
+			}
+
 			// Because ShoppingCart::current() calculates the order once and
 			// then remembers the total, and that was called BEFORE the product
 			// was added, we need to recalculate again here. Under non-ajax
