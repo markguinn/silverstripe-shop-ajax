@@ -14,3 +14,11 @@ AddProductForm:
     - ShoppingCartAjax
     - AjaxControllerExtension
     - ViewableCart
+CartForm:
+  extensions:
+    - ShoppingCartAjax
+    - AjaxControllerExtension
+    - ViewableCart
+CartPage_Controller:
+  extensions:
+    - ShoppingCartAjax
