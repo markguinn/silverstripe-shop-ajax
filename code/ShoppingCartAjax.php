@@ -281,7 +281,7 @@ class ShoppingCartAjax extends Extension {
 					'content'   => $this->owner->cart->getMessage(),
 					'type'      => $this->owner->cart->getMessageType(),
 				));
-				$this->owner->cart->clearMessage();
+				$form->clearMessage();
 			}
 
 			// Because ShoppingCart::current() calculates the order once and
