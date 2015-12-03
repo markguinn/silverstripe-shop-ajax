@@ -9,6 +9,9 @@ Install via composer:
 composer require markguinn/silverstripe-shop-ajax:dev-master
 ```
 
+Please make sure you completely install `markguinn/silverstripe-ajax` by also including needed CSS and JS files. 
+A minimal working setup requires `base.js` from `markguinn/silverstripe-ajax`. 
+
 
 Developer(s)
 ------------
