@@ -27,7 +27,7 @@ class ShoppingCartAjax extends Extension {
 				'quantity'  => $quantity,
 			));
 
-			if(self::config()->show_ajax_messages) {
+			if(self::config()->show_ajax_messages && $this->owner->cart) {
 				$response->triggerEvent('statusmessage', array(
 					'content'   => $this->owner->cart->getMessage(),
 					'type'      => $this->owner->cart->getMessageType(),
@@ -63,7 +63,7 @@ class ShoppingCartAjax extends Extension {
 				'quantity'  => $quantity,
 			));
 
-			if(self::config()->show_ajax_messages) {
+			if(self::config()->show_ajax_messages && $this->owner->cart) {
 				$response->triggerEvent('statusmessage', array(
 					'content'   => $this->owner->cart->getMessage(),
 					'type'      => $this->owner->cart->getMessageType(),
@@ -104,7 +104,7 @@ class ShoppingCartAjax extends Extension {
 				'quantity'  => 0,
 			));
 
-			if(self::config()->show_ajax_messages) {
+			if(self::config()->show_ajax_messages && $this->owner->cart) {
 				$response->triggerEvent('statusmessage', array(
 					'content'   => $this->owner->cart->getMessage(),
 					'type'      => $this->owner->cart->getMessageType(),
@@ -146,7 +146,7 @@ class ShoppingCartAjax extends Extension {
 				'quantity'  => $quantity,
 			));
 
-			if(self::config()->show_ajax_messages) {
+			if(self::config()->show_ajax_messages && $this->owner->cart) {
 				$response->triggerEvent('statusmessage', array(
 					'content'   => $this->owner->cart->getMessage(),
 					'type'      => $this->owner->cart->getMessageType(),
@@ -184,7 +184,7 @@ class ShoppingCartAjax extends Extension {
 				'action'    => 'clear',
 			));
 
-			if(self::config()->show_ajax_messages) {
+			if(self::config()->show_ajax_messages && $this->owner->cart) {
 				$response->triggerEvent('statusmessage', array(
 					'content'   => $this->owner->cart->getMessage(),
 					'type'      => $this->owner->cart->getMessageType(),
@@ -276,7 +276,7 @@ class ShoppingCartAjax extends Extension {
 				'quantity'  => $quantity,
 			));
 
-			if(self::config()->show_ajax_messages) {
+			if(self::config()->show_ajax_messages && $this->owner->cart) {
 				$response->triggerEvent('statusmessage', array(
 					'content'   => $this->owner->cart->getMessage(),
 					'type'      => $this->owner->cart->getMessageType(),
@@ -299,6 +299,7 @@ class ShoppingCartAjax extends Extension {
 	 */
 	public function updateCartForm(&$form, $cart) {
 		$form->addExtraClass('ajax');
+		$form->setAttribute('data-ajax-region','CartFormAjax');
 	}
 
 
@@ -311,9 +312,6 @@ class ShoppingCartAjax extends Extension {
 		if ($request->isAjax()) {
 			if (!$response) $response = $this->owner->getAjaxResponse();
 			$this->setupRenderContexts($response);
-
-			$data['Editable'] = true;
-			$response->pushRegion('CartTable', $this->owner->cart, $data);
 
 			if(self::config()->show_ajax_messages) {
 				$response->triggerEvent('statusmessage', array(
@@ -329,6 +327,9 @@ class ShoppingCartAjax extends Extension {
 			// requests the redirect eliminates the need for this but under
 			// ajax the total lags behind the subtotal without this.
 			ShoppingCart::curr()->calculate();
+
+			$response->pushRegion('CartFormAjax', $this->owner, array('Editable' => true));
+
 		}
 	}
 
