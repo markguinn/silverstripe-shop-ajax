@@ -18,6 +18,14 @@ class ShoppingCartAjax extends Extension {
 	public function updateAddResponse(&$request, &$response, $product=null, $quantity=1) {
 		if ($request->isAjax()) {
 			if (!$response) $response = $this->owner->getAjaxResponse();
+
+			// Because ShoppingCart::current() calculates the order once and
+			// then remembers the total, and that was called BEFORE the product
+			// was added, we need to recalculate again here. Under non-ajax
+			// requests the redirect eliminates the need for this but under
+			// ajax the total lags behind the subtotal without this.
+			ShoppingCart::curr()->calculate();
+
 			$this->setupRenderContexts($response, $product);
 			$response->pushRegion('SideCart', $this->owner);
 			$response->triggerEvent('cartadd');
@@ -35,12 +43,6 @@ class ShoppingCartAjax extends Extension {
 				$this->owner->cart->clearMessage();
 			}
 
-			// Because ShoppingCart::current() calculates the order once and
-			// then remembers the total, and that was called BEFORE the product
-			// was added, we need to recalculate again here. Under non-ajax
-			// requests the redirect eliminates the need for this but under
-			// ajax the total lags behind the subtotal without this.
-			ShoppingCart::curr()->calculate();
 		}
 	}
 
@@ -54,6 +56,15 @@ class ShoppingCartAjax extends Extension {
 	public function updateRemoveResponse(&$request, &$response, $product=null, $quantity=1) {
 		if ($request->isAjax()) {
 			if (!$response) $response = $this->owner->getAjaxResponse();
+
+			// Because ShoppingCart::current() calculates the order once and
+			// then remembers the total, and that was called BEFORE the product
+			// was added, we need to recalculate again here. Under non-ajax
+			// requests the redirect eliminates the need for this but under
+			// ajax the total lags behind the subtotal without this.
+			$order = ShoppingCart::curr();
+			$order->calculate();
+
 			$this->setupRenderContexts($response, $product);
 			$response->pushRegion('SideCart', $this->owner);
 			$response->triggerEvent('cartremove');
@@ -71,14 +82,6 @@ class ShoppingCartAjax extends Extension {
 				$this->owner->cart->clearMessage();
 			}
 
-			// Because ShoppingCart::current() calculates the order once and
-			// then remembers the total, and that was called BEFORE the product
-			// was added, we need to recalculate again here. Under non-ajax
-			// requests the redirect eliminates the need for this but under
-			// ajax the total lags behind the subtotal without this.
-			$order = ShoppingCart::curr();
-			$order->calculate();
-
 			// This allows clientside scripts to redirect away from the cart/checkout pages if desired
 			if (!$order || !$order->Items()->exists()) {
 				$response->triggerEvent('cartempty');
@@ -95,6 +98,15 @@ class ShoppingCartAjax extends Extension {
 	public function updateRemoveAllResponse(&$request, &$response, $product=null) {
 		if ($request->isAjax()) {
 			if (!$response) $response = $this->owner->getAjaxResponse();
+
+			// Because ShoppingCart::current() calculates the order once and
+			// then remembers the total, and that was called BEFORE the product
+			// was added, we need to recalculate again here. Under non-ajax
+			// requests the redirect eliminates the need for this but under
+			// ajax the total lags behind the subtotal without this.
+			$order = ShoppingCart::curr();
+			$order->calculate();
+
 			$this->setupRenderContexts($response, $product);
 			$response->pushRegion('SideCart', $this->owner);
 			$response->triggerEvent('cartremove');
@@ -111,14 +123,6 @@ class ShoppingCartAjax extends Extension {
 				));
 				$this->owner->cart->clearMessage();
 			}
-
-			// Because ShoppingCart::current() calculates the order once and
-			// then remembers the total, and that was called BEFORE the product
-			// was added, we need to recalculate again here. Under non-ajax
-			// requests the redirect eliminates the need for this but under
-			// ajax the total lags behind the subtotal without this.
-			$order = ShoppingCart::curr();
-			$order->calculate();
 
 			// This allows clientside scripts to redirect away from the cart/checkout pages if desired
 			if (!$order || !$order->Items()->exists()) {
@@ -137,6 +141,15 @@ class ShoppingCartAjax extends Extension {
 	public function updateSetQuantityResponse(&$request, &$response, $product=null, $quantity=1) {
 		if ($request->isAjax()) {
 			if (!$response) $response = $this->owner->getAjaxResponse();
+
+			// Because ShoppingCart::current() calculates the order once and
+			// then remembers the total, and that was called BEFORE the product
+			// was added, we need to recalculate again here. Under non-ajax
+			// requests the redirect eliminates the need for this but under
+			// ajax the total lags behind the subtotal without this.
+			$order = ShoppingCart::curr();
+			$order->calculate();
+
 			$this->setupRenderContexts($response, $product);
 			$response->pushRegion('SideCart', $this->owner);
 			$response->triggerEvent('cartquantity');
@@ -154,14 +167,6 @@ class ShoppingCartAjax extends Extension {
 				$this->owner->cart->clearMessage();
 			}
 
-			// Because ShoppingCart::current() calculates the order once and
-			// then remembers the total, and that was called BEFORE the product
-			// was added, we need to recalculate again here. Under non-ajax
-			// requests the redirect eliminates the need for this but under
-			// ajax the total lags behind the subtotal without this.
-			$order = ShoppingCart::curr();
-			$order->calculate();
-
 			// This allows clientside scripts to redirect away from the cart/checkout pages if desired
 			if (!$order || !$order->Items()->exists()) {
 				$response->triggerEvent('cartempty');
@@ -177,6 +182,14 @@ class ShoppingCartAjax extends Extension {
 	public function updateClearResponse(&$request, &$response) {
 		if ($request->isAjax()) {
 			if (!$response) $response = $this->owner->getAjaxResponse();
+
+			// Because ShoppingCart::current() calculates the order once and
+			// then remembers the total, and that was called BEFORE the product
+			// was added, we need to recalculate again here. Under non-ajax
+			// requests the redirect eliminates the need for this but under
+			// ajax the total lags behind the subtotal without this.
+			ShoppingCart::curr()->calculate();
+
 			$this->setupRenderContexts($response);
 			$response->pushRegion('SideCart', $this->owner);
 			$response->triggerEvent('cartempty'); // this is triggered any time the cart has no items in it
@@ -191,13 +204,6 @@ class ShoppingCartAjax extends Extension {
 				));
 				$this->owner->cart->clearMessage();
 			}
-
-			// Because ShoppingCart::current() calculates the order once and
-			// then remembers the total, and that was called BEFORE the product
-			// was added, we need to recalculate again here. Under non-ajax
-			// requests the redirect eliminates the need for this but under
-			// ajax the total lags behind the subtotal without this.
-			ShoppingCart::curr()->calculate();
 		}
 	}
 
@@ -220,6 +226,14 @@ class ShoppingCartAjax extends Extension {
 	public function updateVariationFormResponse(&$request, &$response, $variation=null, $quantity=1, $form=null) {
 		if ($request->isAjax()) {
 			if (!$response) $response = $this->owner->getAjaxResponse();
+
+			// Because ShoppingCart::current() calculates the order once and
+			// then remembers the total, and that was called BEFORE the product
+			// was added, we need to recalculate again here. Under non-ajax
+			// requests the redirect eliminates the need for this but under
+			// ajax the total lags behind the subtotal without this.
+			ShoppingCart::curr()->calculate();
+
 			$this->setupRenderContexts($response, $variation);
 			$response->addRenderContext('FORM', $form);
 			$response->pushRegion('SideCart', $this->owner);
@@ -237,13 +251,6 @@ class ShoppingCartAjax extends Extension {
 				));
 				$form->clearMessage();
 			}
-
-			// Because ShoppingCart::current() calculates the order once and
-			// then remembers the total, and that was called BEFORE the product
-			// was added, we need to recalculate again here. Under non-ajax
-			// requests the redirect eliminates the need for this but under
-			// ajax the total lags behind the subtotal without this.
-			ShoppingCart::curr()->calculate();
 		}
 	}
 
@@ -266,6 +273,14 @@ class ShoppingCartAjax extends Extension {
 	public function updateAddProductFormResponse(&$request, &$response, $buyable=null, $quantity=1, $form=null) {
 		if ($request->isAjax()) {
 			if (!$response) $response = $this->owner->getAjaxResponse();
+
+			// Because ShoppingCart::current() calculates the order once and
+			// then remembers the total, and that was called BEFORE the product
+			// was added, we need to recalculate again here. Under non-ajax
+			// requests the redirect eliminates the need for this but under
+			// ajax the total lags behind the subtotal without this.
+			ShoppingCart::curr()->calculate();
+
 			$this->setupRenderContexts($response, $buyable);
 			$response->addRenderContext('FORM', $form);
 			$response->pushRegion('SideCart', $this->owner);
@@ -283,13 +298,6 @@ class ShoppingCartAjax extends Extension {
 				));
 				$form->clearMessage();
 			}
-
-			// Because ShoppingCart::current() calculates the order once and
-			// then remembers the total, and that was called BEFORE the product
-			// was added, we need to recalculate again here. Under non-ajax
-			// requests the redirect eliminates the need for this but under
-			// ajax the total lags behind the subtotal without this.
-			ShoppingCart::curr()->calculate();
 		}
 	}
 
@@ -311,6 +319,14 @@ class ShoppingCartAjax extends Extension {
 	public function updateCartFormResponse(&$request, &$response, $form=null) {
 		if ($request->isAjax()) {
 			if (!$response) $response = $this->owner->getAjaxResponse();
+
+			// Because ShoppingCart::current() calculates the order once and
+			// then remembers the total, and that was called BEFORE the product
+			// was added, we need to recalculate again here. Under non-ajax
+			// requests the redirect eliminates the need for this but under
+			// ajax the total lags behind the subtotal without this.
+			ShoppingCart::curr()->calculate();
+
 			$this->setupRenderContexts($response);
 
 			if(self::config()->show_ajax_messages) {
@@ -321,15 +337,7 @@ class ShoppingCartAjax extends Extension {
 				$form->clearMessage();
 			}
 
-			// Because ShoppingCart::current() calculates the order once and
-			// then remembers the total, and that was called BEFORE the product
-			// was added, we need to recalculate again here. Under non-ajax
-			// requests the redirect eliminates the need for this but under
-			// ajax the total lags behind the subtotal without this.
-			ShoppingCart::curr()->calculate();
-
 			$response->pushRegion('CartFormAjax', $this->owner, array('Editable' => true));
-
 		}
 	}
 
