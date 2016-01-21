@@ -365,6 +365,7 @@ class ShoppingCartAjax extends Extension
             }
 
             $response->pushRegion('CartFormAjax', $this->owner, array('Editable' => true));
+            $response->pushRegion('SideCart', $this->owner);
         }
     }
 
