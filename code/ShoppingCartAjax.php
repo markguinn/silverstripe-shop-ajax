@@ -73,6 +73,7 @@ class ShoppingCartAjax extends Extension
 
             $this->setupRenderContexts($response, $product);
             $response->pushRegion('SideCart', $this->owner);
+            $response->pushRegion('CartFormAjax', $this->owner, array('Editable' => true));
             $response->triggerEvent('cartremove');
             $response->triggerEvent('cartchange', array(
                 'action'    => 'remove',
@@ -118,6 +119,7 @@ class ShoppingCartAjax extends Extension
 
             $this->setupRenderContexts($response, $product);
             $response->pushRegion('SideCart', $this->owner);
+            $response->pushRegion('CartFormAjax', $this->owner, array('Editable' => true));
             $response->triggerEvent('cartremove');
             $response->triggerEvent('cartchange', array(
                 'action'    => 'removeall',
