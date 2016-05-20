@@ -14,7 +14,7 @@
 	},
 	"require": {
 		"silverstripe/framework": "~3.1",
-		"burnbright/silverstripe-shop": "~1.0",
+    "silvershop/core": "~1.0 || ~2.0",
 		"markguinn/silverstripe-ajax": "~1.0.0"
 	}
 }
