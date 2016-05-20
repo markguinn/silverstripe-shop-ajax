@@ -39,13 +39,7 @@ class ShoppingCartAjax extends Extension
                 'quantity'  => $quantity,
             ));
 
-            if (self::config()->show_ajax_messages && $this->owner->cart) {
-                $response->triggerEvent('statusmessage', array(
-                    'content'   => $this->owner->cart->getMessage(),
-                    'type'      => $this->owner->cart->getMessageType(),
-                ));
-                $this->owner->cart->clearMessage();
-            }
+            $this->triggerStatusMessage($response);
         }
     }
 
@@ -81,13 +75,7 @@ class ShoppingCartAjax extends Extension
                 'quantity'  => $quantity,
             ));
 
-            if (self::config()->show_ajax_messages && $this->owner->cart) {
-                $response->triggerEvent('statusmessage', array(
-                    'content'   => $this->owner->cart->getMessage(),
-                    'type'      => $this->owner->cart->getMessageType(),
-                ));
-                $this->owner->cart->clearMessage();
-            }
+            $this->triggerStatusMessage($response);
 
             // This allows clientside scripts to redirect away from the cart/checkout pages if desired
             if (!$order || !$order->Items()->exists()) {
@@ -127,13 +115,7 @@ class ShoppingCartAjax extends Extension
                 'quantity'  => 0,
             ));
 
-            if (self::config()->show_ajax_messages && $this->owner->cart) {
-                $response->triggerEvent('statusmessage', array(
-                    'content'   => $this->owner->cart->getMessage(),
-                    'type'      => $this->owner->cart->getMessageType(),
-                ));
-                $this->owner->cart->clearMessage();
-            }
+            $this->triggerStatusMessage($response);
 
             // This allows clientside scripts to redirect away from the cart/checkout pages if desired
             if (!$order || !$order->Items()->exists()) {
@@ -173,13 +155,7 @@ class ShoppingCartAjax extends Extension
                 'quantity'  => $quantity,
             ));
 
-            if (self::config()->show_ajax_messages && $this->owner->cart) {
-                $response->triggerEvent('statusmessage', array(
-                    'content'   => $this->owner->cart->getMessage(),
-                    'type'      => $this->owner->cart->getMessageType(),
-                ));
-                $this->owner->cart->clearMessage();
-            }
+            $this->triggerStatusMessage($response);
 
             // This allows clientside scripts to redirect away from the cart/checkout pages if desired
             if (!$order || !$order->Items()->exists()) {
@@ -214,13 +190,7 @@ class ShoppingCartAjax extends Extension
                 'action'    => 'clear',
             ));
 
-            if (self::config()->show_ajax_messages && $this->owner->cart) {
-                $response->triggerEvent('statusmessage', array(
-                    'content'   => $this->owner->cart->getMessage(),
-                    'type'      => $this->owner->cart->getMessageType(),
-                ));
-                $this->owner->cart->clearMessage();
-            }
+            $this->triggerStatusMessage($response);
         }
     }
 
@@ -265,20 +235,14 @@ class ShoppingCartAjax extends Extension
                 'quantity'  => $quantity,
             ));
 
-            if (self::config()->show_ajax_messages) {
-                $response->triggerEvent('statusmessage', array(
-                    'content'   => $form->Message(),
-                    'type'      => $form->MessageType(),
-                ));
-                $form->clearMessage();
-            }
+            $this->triggerStatusMessage($response, $form);
         }
     }
 
 
     /**
-    * Adds the ajax class to the AddProductForm
-    */
+     * Adds the ajax class to the AddProductForm
+     */
     public function updateAddProductForm()
     {
         $this->owner->addExtraClass('ajax');
@@ -286,12 +250,12 @@ class ShoppingCartAjax extends Extension
 
 
     /**
-    * @param SS_HTTPRequest $request
-    * @param AjaxHTTPResponse $response
-    * @param Buyable $buyable [optional]
-    * @param int $quantity [optional]
-    * @param AddProductForm $form [optional]
-    */
+     * @param SS_HTTPRequest $request
+     * @param AjaxHTTPResponse $response
+     * @param Buyable $buyable [optional]
+     * @param int $quantity [optional]
+     * @param AddProductForm $form [optional]
+     */
     public function updateAddProductFormResponse(&$request, &$response, $buyable=null, $quantity=1, $form=null)
     {
         if ($request->isAjax()) {
@@ -316,13 +280,7 @@ class ShoppingCartAjax extends Extension
                 'quantity'  => $quantity,
             ));
 
-            if (self::config()->show_ajax_messages && $this->owner->cart) {
-                $response->triggerEvent('statusmessage', array(
-                    'content'   => $this->owner->cart->getMessage(),
-                    'type'      => $this->owner->cart->getMessageType(),
-                ));
-                $form->clearMessage();
-            }
+            $this->triggerStatusMessage($response, $form);
         }
     }
 
@@ -357,14 +315,7 @@ class ShoppingCartAjax extends Extension
             ShoppingCart::curr()->calculate();
 
             $this->setupRenderContexts($response);
-
-            if (self::config()->show_ajax_messages) {
-                $response->triggerEvent('statusmessage', array(
-                    'content'   => $form->Message(),
-                    'type'      => $form->MessageType(),
-                ));
-                $form->clearMessage();
-            }
+            $this->triggerStatusMessage($response, $form);
 
             $response->pushRegion('CartFormAjax', $this->owner, array('Editable' => true));
             $response->pushRegion('SideCart', $this->owner);
@@ -398,6 +349,43 @@ class ShoppingCartAjax extends Extension
             } elseif ($buyable->hasMethod('Product')) {
                 $response->addRenderContext('PRODUCT', $buyable->Product());
             }
+        }
+    }
+
+    /**
+     * Add status message to the response (only if `show_ajax_messages` config is set)
+     * @param AjaxHTTPResponse $response
+     * @param Form|null $form the form instance
+     */
+    protected function triggerStatusMessage($response, $form = null)
+    {
+        if (!self::config()->show_ajax_messages) {
+            return;
+        }
+
+        $message = '';
+        $type = '';
+        if ($this->owner->cart) {
+            $message = $this->owner->cart->getMessage();
+            $type = $this->owner->cart->getMessageType();
+            $this->owner->cart->clearMessage();
+        }
+
+        if ($form) {
+            // if the message was not previously set via cart, get the message from $form
+            if (empty($message)) {
+                $message = $form->Message();
+                $type = $form->MessageType();
+            }
+
+            $form->clearMessage();
+        }
+
+        if (!empty($message)) {
+            $response->triggerEvent('statusmessage', array(
+                'content'   => $message,
+                'type'      => $type
+            ));
         }
     }
 
