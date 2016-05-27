@@ -365,7 +365,7 @@ class ShoppingCartAjax extends Extension
 
         $message = '';
         $type = '';
-        if ($this->owner->cart) {
+        if ($this->owner->cart && $this->owner->cart instanceof ShoppingCart) {
             $message = $this->owner->cart->getMessage();
             $type = $this->owner->cart->getMessageType();
             $this->owner->cart->clearMessage();
